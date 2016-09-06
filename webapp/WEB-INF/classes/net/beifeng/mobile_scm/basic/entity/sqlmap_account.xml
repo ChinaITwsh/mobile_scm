@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="account">
+	<typeAlias alias="account"
+		type="net.beifeng.mobile_scm.basic.entity.Account" />
+
+	<resultMap class="account" id="accRm">
+		<result column="accountid" property="accountid" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="balance" property="balance" jdbcType="DECIMAL" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="deptId" property="dept" select="dept.getDeptById" />
+	</resultMap>
+	<select id="getAcc" resultMap="accRm">
+		select * from bas_account
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="account.accountid">
+				accountId=#account.accountid#
+		  </isNotEmpty>
+			<isNotEmpty prepend="and" property="account.dept.deptId">
+				deptId=#account.dept.deptId#
+		  </isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="addAcc" parameterClass="account">
+		insert into bas_account
+		(accountid, name, balance, remark, deptId)
+		values (#accountid:VARCHAR#,
+		#name:VARCHAR#, #balance:DECIMAL#,
+		#remark:VARCHAR#,
+		#dept.deptId:CHAR#)
+	</insert>
+
+	<update id="editAcc" parameterClass="account">
+		update bas_account
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="name">
+				name = #name:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="balance">
+				balance = #balance:DECIMAL#
+		      </isNotNull>
+			<isNotNull prepend="," property="remark">
+				remark = #remark:VARCHAR#
+		      </isNotNull>
+			<isNotNull prepend="," property="dept.deptId">
+				deptId = #dept.deptId:CHAR#
+		      </isNotNull>
+		</dynamic>
+		where accountid = #accountid:VARCHAR#
+	</update>
+
+	<delete id="delAcc">
+		delete from bas_account where accountId=#value#
+	</delete>
+</sqlMap>

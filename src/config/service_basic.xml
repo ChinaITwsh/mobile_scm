@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="byName">
+
+	<bean id="deptManageService"
+		class="net.beifeng.mobile_scm.basic.service.DeptManageServiceImpl">
+	</bean>
+
+	<bean id="empManageService"
+		class="net.beifeng.mobile_scm.basic.service.EmpManageServiceImpl">
+	</bean>
+
+	<bean id="supTypeService" class="net.beifeng.mobile_scm.basic.service.SupTypeServiceImpl"></bean>
+	<bean id="supService" class="net.beifeng.mobile_scm.basic.service.SupServiceImpl"></bean>
+	<bean id="custTypeService"
+		class="net.beifeng.mobile_scm.basic.service.CustTypeServiceImpl"></bean>
+	<bean id="custService" class="net.beifeng.mobile_scm.basic.service.CustServiceImpl"></bean>
+	<bean id="mobTypeService" class="net.beifeng.mobile_scm.basic.service.MobTypeServiceImpl"></bean>
+	
+	<bean id="reportService" class="net.beifeng.mobile_scm.basic.service.ReportService"></bean>
+</beans>
+

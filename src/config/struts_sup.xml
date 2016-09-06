@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="sup" namespace="/" extends="cust-default">
+		<action name="mobStockIn_*" method="{1}"
+			class="net.beifeng.mobile_scm.sup.action.MobStockInAction">
+			<result name="list">/WEB-INF/jsp/sup/mobStockIn_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/sup/mobStockIn_add.jsp
+			</result>
+		</action>
+
+		<action name="mobReturn_*" method="{1}"
+			class="net.beifeng.mobile_scm.sup.action.MobReturnAction">
+			<result name="list">/WEB-INF/jsp/sup/mobReturn_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/sup/mobReturn_add.jsp
+			</result>
+			<result name="exist" type="json"></result>
+		</action>
+
+		<action name="mobEx_*" method="{1}"
+			class="net.beifeng.mobile_scm.sup.action.MobExchangeAction">
+			<result name="list">/WEB-INF/jsp/sup/mobEx_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/sup/mobEx_add.jsp
+			</result>
+			<result name="success" type="redirect">mobEx_snManage.do?invoiceid=${mobExchange.invoiceid}&amp;errInfo=${errMap.snNotExist}</result>
+            <result name="snManage">/WEB-INF/jsp/sup/mobEx_snManage.jsp</result>
+        </action>
+        
+        <action name="pay_*" method="{1}"
+            class="net.beifeng.mobile_scm.sup.action.PayAction">
+            <result name="list">/WEB-INF/jsp/sup/pay_list.jsp
+            </result>
+            <result name="add">/WEB-INF/jsp/sup/pay_add.jsp
+            </result>
+            <result name="success" type="redirect">pay_list.do</result>
+        </action>
+        
+         <action name="commonBonus_*" method="{1}"
+            class="net.beifeng.mobile_scm.sup.action.CommonBonusAction">
+            <result name="list">/WEB-INF/jsp/sup/commonBonus_list.jsp
+            </result>
+            <result name="add">/WEB-INF/jsp/sup/commonBonus_add.jsp
+            </result>
+            <result name="success" type="redirect">commonBonus_snManage.do?invoiceid=${commonBonus.invoiceid}</result>
+            <result name="snManage">/WEB-INF/jsp/sup/commonBonus_snManage.jsp</result>
+            <result name="querySn">/WEB-INF/jsp/sup/commonBonus_querySn.jsp</result>
+        </action>
+	</package>
+
+</struts>

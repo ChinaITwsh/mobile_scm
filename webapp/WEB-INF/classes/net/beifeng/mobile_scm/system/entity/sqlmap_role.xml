@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="role">
+	<typeAlias alias="role"
+		type="net.beifeng.mobile_scm.system.entity.SysRole" />
+
+	<select id="getRole" resultClass="role">
+		select * from sys_role
+		<dynamic prepend="where">
+			<isNotEmpty property="role.roleId" prepend="and">
+				roleId=#role.roleId#
+			</isNotEmpty>
+			<isNotEmpty property="role.roleName" prepend="and">
+				roleName like CONCAT('%', #role.roleName# , '%')
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+				<iterate open="(" close=")" conjunction="or"
+					property="status">
+					status=#status[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="addRole" parameterClass="role">
+		insert into sys_role (roleId, roleName, remark, status)
+		values(#roleId#, #roleName#, #remark#, #status#)
+	</insert>
+
+	<update id="editRole" parameterClass="role">
+		update sys_role
+		<dynamic prepend="set">
+			<isNotEmpty prepend="," property="roleName">
+				roleName=#roleName#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="remark">
+				remark=#remark#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="status">
+				status=#status#
+			</isNotEmpty>
+		</dynamic>
+		where roleId=#roleId#
+	</update>
+
+	<select id="getMenus" resultClass="java.util.HashMap">
+		select * from sys_rolemenu
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="roleId">
+				roleId=#roleId#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getActions" resultClass="java.util.HashMap">
+		select * from sys_roleaction
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="roleId">
+				roleId=#roleId#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<delete id="delRelate">
+		delete from $table$ where roleId=#roleId#
+	</delete>
+	
+	<insert id="addRelate">
+		insert into $table$ values(#id#, #roleId#, #objId#)
+	</insert>
+</sqlMap>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="menu">
+	<typeAlias alias="menu"
+		type="net.beifeng.mobile_scm.system.entity.SysMenu" />
+	<typeAlias alias="action"
+		type="net.beifeng.mobile_scm.system.entity.SysAction" />
+
+	<resultMap class="menu" id="menuResult">
+		<result column="menuId" property="menuId" />
+		<result column="menuName" property="menuName" />
+		<result column="type" property="type" />
+		<result column="actionId" property="action"
+			select="menu.getActionById" />
+		<result column="parentId" property="parentId" />
+		<result column="sortOrder" property="sortOrder" />
+		<result column="remark" property="remark" />
+	</resultMap>
+
+	<select id="getMenu" resultMap="menuResult">
+		select * from sys_menu
+		<dynamic prepend="where">
+			<isNotEmpty property="menu.menuId" prepend="and">
+				menuId=#menu.menuId#
+			</isNotEmpty>
+			<isNotEmpty property="menu.parentId" prepend="and">
+				parentId=#menu.parentId#
+			</isNotEmpty>
+			<isNotEmpty property="roleList" prepend="and">
+				exists (select id from sys_rolemenu where
+				sys_rolemenu.menuid=sys_menu.menuid
+				<iterate property="roleList" prepend="and" open="("
+					close=")" conjunction="or">
+					roleid=#roleList[].roleId#
+				</iterate>
+				)
+			</isNotEmpty>
+		</dynamic>
+		order by sortOrder
+	</select>
+
+	<select id="getActionById" resultClass="action">
+		select * from sys_action where actionId=#value#
+	</select>
+
+	<select id="getAction" parameterClass="action"
+		resultClass="action">
+		select * from sys_action
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="actionId">
+				actionId=#actionId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="menuId">
+				menuId=#menuId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="type">
+				type=#type#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="addMenu" parameterClass="menu">
+		insert into sys_menu (menuId, menuName, type, actionId,
+		parentId, sortOrder, remark) values(#menuId#, #menuName#,
+		#type#, #action.actionId#, #parentId#, #sortOrder#, #remark#)
+	</insert>
+
+	<insert id="addAction" parameterClass="action">
+		insert into sys_action (actionId, actionName, type, menuId,
+		remark) values (#actionId#, #actionName#, #type#, #menuId#,
+		#remark#)
+	</insert>
+
+	<select id="getMaxOrder" resultClass="int">
+		select max(sortOrder) from sys_menu where parentId=#value#
+	</select>
+
+	<update id="editAction" parameterClass="action">
+		update sys_action set actionName=#actionName#
+		<isNotNull prepend="," property="remark">
+			remark=#remark#
+		</isNotNull>
+		<isNotNull prepend="," property="type">
+			type=#type#
+		</isNotNull>
+		where actionId=#actionId#
+	</update>
+
+	<update id="editMenu" parameterClass="menu">
+		update sys_menu
+		<dynamic prepend="set">
+			<isNotEmpty property="menuName" prepend=",">
+				menuName=#menuName#
+			</isNotEmpty>
+			<isNotEmpty property="remark" prepend=",">
+				remark=#remark#
+			</isNotEmpty>
+			<isNotEmpty property="sortOrder" prepend=",">
+				sortOrder=#sortOrder#
+			</isNotEmpty>
+		</dynamic>
+		where menuId=#menuId#
+	</update>
+
+	<delete id="delActionList">
+		delete from $table$ where
+		<iterate property="actions" conjunction="or">
+			actionId=#actions[].actionId#
+		</iterate>
+	</delete>
+	
+	<delete id="delAction">
+		delete from sys_action
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="actionId">
+				actionId=#actionId#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+
+	<delete id="delRoleAction">
+		delete from sys_roleAction where actionId=#value#	
+	</delete>
+	
+	<delete id="delMenu">
+		delete from $table$
+		<dynamic prepend="where">
+			<isNotEmpty property="menuId" prepend="and">
+				menuId=#menuId#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+
+	<select id="getNeibMenu" resultClass="menu">
+		select * from sys_menu where parentId=#parentId# and sortOrder =
+		(select $fun$(sortOrder) from sys_menu where parentId=#parentId#
+		and sortOrder $symbol$ #sortOrder#)
+	</select>
+	
+	<select id="getCommonActionList" parameterClass="list" resultClass="string">
+		select actionName from sys_action a join sys_rolemenu m on a.menuid = m.menuid 
+		where a.type=1 
+		<iterate prepend="and" open="(" close=")" conjunction="or">
+			m.roleid=#[]#
+		</iterate>
+	</select>
+	
+	<select id="getAuthorActionList" parameterClass="list" resultClass="string">
+		select a.actionName from sys_action a join sys_roleaction r on a.actionid=r.actionid
+		where a.type=2 
+		<iterate prepend="and" open="(" close=")" conjunction="or">
+			r.roleid=#[]#
+		</iterate>
+	</select>
+</sqlMap>

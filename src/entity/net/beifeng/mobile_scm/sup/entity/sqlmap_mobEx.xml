@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="mobEx">
+	<typeAlias alias="mobEx"
+		type="net.beifeng.mobile_scm.sup.entity.MobExchange" />
+	<typeAlias alias="mobExSn"
+		type="net.beifeng.mobile_scm.sup.entity.MobExchangeSns" />
+
+	<select id="getInvoice" resultClass="mobEx">
+		select * from sup_mobExchange
+		<dynamic prepend="where">
+			<isNotEmpty property="mobEx.invoiceid" prepend="and">
+				invoiceid=#mobEx.invoiceid#
+          </isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="addInvoice" parameterClass="mobEx">
+		insert into
+		sup_mobExchange values(#invoiceid:VARCHAR#, #status:INTEGER#,
+		#supplierid:VARCHAR#, #mobtypeid:VARCHAR#,
+		0, #unitprice:DECIMAL#, 0,
+		#inputdate:TIMESTAMP#,
+		#inputuserid:CHAR#, null, null,
+		#remark:VARCHAR#, '8CDB0902038E499EBD518E168FEC281B')
+    </insert>
+
+	<select id="getSns" resultClass="mobExSn">
+		select * from sup_mobExchangeSns where invoiceid=#value#
+    </select>
+</sqlMap>

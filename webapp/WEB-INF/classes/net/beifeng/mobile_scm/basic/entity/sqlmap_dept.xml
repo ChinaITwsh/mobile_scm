@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="dept">
+	<typeAlias alias="dept"
+		type="net.beifeng.mobile_scm.basic.entity.Dept" />
+
+	<select id="getDept" resultClass="dept">
+		select * from basic_dept
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="dept.deptId">
+				deptId=#dept.deptId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="dept.deptName">
+				deptName like concat('%', #dept.deptName#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="dept.address">
+				address like concat('%', #dept.address#, '%')
+			</isNotEmpty>
+
+		</dynamic>
+	</select>
+	
+	<select id="getDeptById" resultClass="dept">
+	   select * from basic_dept where deptId=#value#
+	</select>
+
+	<insert id="addDept" parameterClass="dept">
+		insert into basic_dept (deptId, deptName, address, tel, linkman,
+		remark) values (#deptId:CHAR#, #deptName:VARCHAR#,
+		#address:VARCHAR#, #tel:VARCHAR#, #linkman:VARCHAR#,
+		#remark:VARCHAR#)
+	</insert>
+
+	<update id="editDept" parameterClass="dept">
+		update basic_dept set deptName = #deptName:VARCHAR#, address =
+		#address:VARCHAR#, tel = #tel:VARCHAR#, linkman =
+		#linkman:VARCHAR#, remark = #remark:VARCHAR# where deptId =
+		#deptId:CHAR#
+	</update>
+
+	<delete id="delDept">
+		delete from basic_dept where deptId = #deptId:CHAR#
+	</delete>
+</sqlMap>

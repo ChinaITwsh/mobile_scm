@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="accessoryType">
+	<typeAlias alias="accessoryType"
+		type="net.beifeng.mobile_scm.basic.entity.AccessoryType" />
+
+	<select id="getType" resultClass="accessoryType">
+		select * from bas_accessoryType
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="accessoryType.accessorytypeid">
+				accessorytypeid=#accessoryType.accessorytypeid#
+		    </isNotEmpty>
+			<isNotEmpty prepend="and" property="accessoryType.brand">
+				brand=#accessoryType.brand#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="accessoryType.typename">
+				typeName like
+				concat('%', #accessoryType.typename#, '%')
+			</isNotEmpty>		
+		</dynamic>
+		order by accessorytypeid
+	</select>
+
+    <insert id="addType" parameterClass="accessoryType">
+        insert into bas_accessorytype (accessoryTypeId, typeName, unit, spec, manufacturer, remark,
+        brand)
+        values (#accessorytypeid:VARCHAR#, #typename:VARCHAR#, #unit:VARCHAR#, #spec:VARCHAR#,
+        #manufacturer:VARCHAR#, #remark:VARCHAR#, #brand:VARCHAR#)
+    </insert>
+    
+    <update id="editType" parameterClass="accessoryType">
+        update bas_accessorytype
+	    <dynamic prepend="set" >
+	      <isNotNull prepend="," property="typename" >
+	        typeName = #typename:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="unit" >
+	        unit = #unit:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="spec" >
+	        spec = #spec:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="manufacturer" >
+	        manufacturer = #manufacturer:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="remark" >
+	        remark = #remark:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="brand" >
+	        brand = #brand:VARCHAR#
+	      </isNotNull>
+	    </dynamic>
+	    where accessoryTypeId = #accessorytypeid:VARCHAR#
+    </update>
+    
+    <delete id="delType">
+        delete from bas_accessoryType where accessoryTypeId=#value#
+    </delete>
+</sqlMap>

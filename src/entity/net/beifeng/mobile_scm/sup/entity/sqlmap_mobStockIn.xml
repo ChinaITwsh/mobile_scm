@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="mobStockIn">
+	<typeAlias alias="mobStockIn"
+		type="net.beifeng.mobile_scm.sup.entity.Mobstockin" />
+
+	<select id="getMobStockIn" resultClass="mobStockIn">
+		SELECT
+		msi.invoiceId,
+		msi.supplierId,
+		msi.mobTypeId,
+		msi.color,
+		msi.config,
+		msi.buyPrice,
+		msi.amount,
+		msi.totalMoney,
+		msi.inputDate,
+		msi.inputUserId,
+		msi.checkDate,
+		msi.checkUserId,
+		msi.status,
+		msi.remark,
+		msi.orgId,
+		sup.supName,
+		mtype.mobTypeName,
+		emp1.empName AS inputUserName,
+		emp2.empName AS checkUserName,
+		org.deptName AS orgName
+		FROM
+		sup_mobstockin AS msi
+		left Join bas_supplier AS sup ON msi.supplierId=
+		sup.supId
+		left Join bas_mobtype AS mtype ON msi.mobTypeId=
+		mtype.mobTypeId
+		left Join sys_users AS usr1 ON msi.inputUserId=
+		usr1.userId
+		left Join basic_emp AS emp1 ON usr1.userId= emp1.userId
+		left Join sys_users AS usr2 ON usr2.userId= msi.checkUserId
+		left Join
+		basic_emp AS emp2 ON usr2.userId= emp2.userId
+		left Join basic_dept AS
+		org ON msi.orgId= org.deptId
+		<dynamic prepend="where">
+		  <iterate prepend="and" open="(" close=")" property="orgScope" conjunction="or">
+		      msi.orgId=#orgScope[]#
+		  </iterate>
+		  <isNotEmpty property="startDate" prepend="and">
+		      msi.inputDate >= #startDate#
+		  </isNotEmpty>
+		  <isNotEmpty property="endDate" prepend="and">
+             <![CDATA[ inputDate <= #endDate# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="msi.supTypeId" prepend="and">
+             sup.supTypeId=#msi.supTypeId#
+          </isNotEmpty>
+          <isNotEmpty property="msi.supplierid" prepend="and">
+             msi.supplierid=#msi.supplierid#
+          </isNotEmpty>
+          <isNotEmpty property="msi.brand" prepend="and">
+             mtype.brand=#msi.brand#
+          </isNotEmpty>
+          <isNotEmpty property="msi.mobtypeid" prepend="and">
+             msi.mobtypeid=#msi.mobtypeid#
+          </isNotEmpty>
+		</dynamic>
+		
+		order by inputDate desc
+	</select>
+</sqlMap>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="user">
+	<typeAlias alias="acc"
+		type="net.beifeng.mobile_scm.system.entity.SysUsers" />
+
+	<cacheModel type="LRU" id="accCache">
+		<flushInterval hours="24" />
+		<flushOnExecute statement="user.addAcc" />
+		<flushOnExecute statement="user.editAcc" />
+		<property name="size" value="100" />
+	</cacheModel>
+	<select id="getAcc" resultClass="acc" cacheModel="accCache">
+		select * from sys_users
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="users.userId">
+				userId=#users.userId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="users.account">
+				account like concat('%', #users.account#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="accName">
+				account = #accName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="statList">
+				<iterate open="(" close=")" conjunction="or"
+					property="statList">
+					status=#statList[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getDeptNameById" resultClass="string">
+		select deptName from basic_dept where deptId=#value#
+	</select>
+	
+	<select id="getRoles" resultClass="role">
+		select * from sys_roleuser left join sys_role on sys_roleuser.roleId=sys_role.roleId where userId=#value#
+	</select>
+
+	<select id="getEmpNameByAccId" resultClass="string">
+		select empName from basic_emp where userId=#value#
+	</select>
+
+	<insert id="addAcc" parameterClass="acc">
+		insert into sys_users values(#userId#,#account#, #passwd#,
+		#remark#, #status#, #createTime#, null, 'default', #queryScope#)
+	</insert>
+	
+	<insert id="addRoleRelate">
+		insert into sys_roleuser values(#id#, #userId#, #roleId#)
+	</insert>
+	
+	<delete id="delRoleRelate">
+		delete from sys_roleuser where userId=#value#
+	</delete>
+
+	<update id="editAcc" parameterClass="acc">
+		update sys_users
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="account">
+				account=#account#
+			</isNotNull>
+			<isNotNull prepend="," property="passwd">
+				passwd=#passwd#
+			</isNotNull>
+			<isNotNull prepend="," property="remark">
+				remark=#remark#
+			</isNotNull>
+			<isNotNull prepend="," property="status">
+				status=#status#
+			</isNotNull>
+			<isNotNull prepend="," property="queryScope">
+				queryScope=#queryScope#
+			</isNotNull>
+		</dynamic>
+		where userId=#userId#
+	</update>
+	
+	<select id="getOrgIdByUserId" resultClass="string">
+	   SELECT
+		e.deptId
+		FROM
+		sys_users AS u
+		Inner Join basic_emp AS e ON u.userId = e.userId
+	   where u.userId=#value#
+	</select>
+</sqlMap>

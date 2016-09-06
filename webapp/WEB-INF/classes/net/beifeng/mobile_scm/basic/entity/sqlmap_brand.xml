@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="brand">
+	<select id="getBrand" resultClass="string">
+		select * from bas_brand
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and">
+				brand=#value#
+            </isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="addBrand">
+		insert into bas_brand values(#value#)
+    </insert>
+
+	<delete id="delBrand">
+		delete from bas_brand where brand=#value#
+    </delete>
+</sqlMap>

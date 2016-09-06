@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="system" namespace="/" extends="cust-default">
+		<action name="roleManage_*" method="{1}"
+			class="net.beifeng.mobile_scm.system.action.RoleManageAction">
+			<result name="list">
+				/WEB-INF/jsp/system/role_list.jsp
+			</result>
+			<result name="addPage">
+				/WEB-INF/jsp/system/role_add.jsp
+			</result>
+			<result name="editPage">
+				/WEB-INF/jsp/system/role_edit.jsp
+			</result>
+			<result name="succ" type="redirect">
+				roleManage_listRole.do
+			</result>
+		</action>
+		<action name="privManage_*" method="{1}"
+			class="net.beifeng.mobile_scm.system.action.PrivManageAction">
+			<result name="init">
+				/WEB-INF/jsp/system/privilege.jsp
+			</result>
+			<result name="menuTree" type="json"></result>
+			<result name="actions" type="json"></result>
+			<result name="privs" type="json"></result>
+		</action>
+
+
+		<action name="accManage_*" method="{1}"
+			class="net.beifeng.mobile_scm.system.action.AccountManageAction">
+			<result name="list">/WEB-INF/jsp/system/acc_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/system/acc_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/system/acc_edit.jsp
+			</result>
+			<result name="succ" type="redirect">accManage_listAcc.do
+			</result>
+			<result name="modifyPasswd">/WEB-INF/jsp/system/acc_repass.jsp
+			</result>
+		</action>
+
+		<action name="log_*" method="{1}"
+			class="net.beifeng.mobile_scm.system.action.LogAction">
+			<result name="list">/WEB-INF/jsp/system/log_list.jsp
+			</result>
+		</action>
+	</package>
+
+</struts>

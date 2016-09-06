@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="mobStock">
+
+	<typeAlias alias="mobStock"
+		type="net.beifeng.mobile_scm.sto.entity.StoMobstock" />
+	<typeAlias alias="stoCount" type="net.beifeng.mobile_scm.sto.entity.StoCount" />
+
+	<select id="findDupSn1" resultClass="int">
+		select count(1) from
+		sto_mobstock where sn1=#value#
+    </select>
+
+	<select id="findDupSn2" resultClass="int">
+		select count(1) from
+		sto_mobstock where sn2=#value#
+    </select>
+
+	<select id="findStockByPk" resultClass="mobStock">
+		SELECT
+		ms.sn1,
+		ms.sn2,
+		ms.mobTypeId,
+		ms.color,
+		ms.config,
+		ms.firstSupplierId,
+		ms.firstInTime,
+		ms.lastSupplierId,
+		ms.lastInTime,
+		ms.buyPrice,
+		ms.cost,
+		ms.lossAmount,
+		ms.orgid,
+		ms.status,
+		sup.supName as
+		firstSupName,
+		mt.mobTypeName
+		FROM
+		sto_mobstock AS ms
+		Left Join
+		bas_supplier AS sup ON ms.firstSupplierId = sup.supId
+		Left Join
+		bas_mobtype AS mt ON ms.mobTypeId = mt.mobTypeId
+		<dynamic prepend="where">
+			<isNotEmpty property="orgId" prepend="and">
+				orgId=#orgId#
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+				status=#status#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="sn1">
+				sn1=#sn1#
+            </isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="countMobtype" resultClass="stoCount">
+		select mobtypeid,
+		count(sn1) as amount, avg(buyPrice) as buyprice,
+		avg(cost) as cost,
+		avg(lossamount) as lossamount from
+		sto_mobStock where
+		<iterate property="orgScope" open="(" close=")" conjunction="or">
+			orgid=#orgScope[]#
+		</iterate>
+		group by mobtypeid
+	</select>
+
+	<select id="getDetail" resultClass="mobStock">
+		select * from sto_mobStock
+		<dynamic prepend="where">
+			<iterate prepend="and" property="orgScope" open="(" close=")"
+				conjunction="or">
+				orgid=#orgScope[]#
+        </iterate>
+			<isNotEmpty property="mobtypeid" prepend="and">
+				mobtypeid=#mobtypeid#
+        </isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

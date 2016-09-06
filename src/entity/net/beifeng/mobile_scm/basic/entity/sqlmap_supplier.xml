@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="sup">
+	<typeAlias alias="sup"
+		type="net.beifeng.mobile_scm.basic.entity.Supplier" />
+
+	<resultMap class="sup" id="supRm">
+		<result column="supId" property="supid" jdbcType="VARCHAR" />
+		<result column="supName" property="supname" jdbcType="VARCHAR" />
+		<result column="supTypeId" property="supType" select="supType.getTypeById" />
+		<result column="linkman" property="linkman" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getSup" resultMap="supRm">
+		select * from bas_supplier
+		<dynamic prepend="where">
+			<isNotEmpty property="supplier.supType.suptypeid" prepend="and">
+				supTypeId=#supplier.supType.suptypeid#
+			</isNotEmpty>
+			<isNotEmpty property="supplier.supname" prepend="and">
+				supName
+				like concat('%',#supplier.supname#,'%')
+			</isNotEmpty>
+		</dynamic>
+		order by supId
+	</select>
+	
+	<select id="getSupById" resultMap = "supRm">
+	   select * from bas_supplier where supId=#value#
+	</select>
+	
+	<insert id="addSup" parameterClass="sup">
+	   insert into bas_supplier (supId, supName, supTypeId, linkman, tel,
+        email, address, remark)
+        values (#supid:VARCHAR#, #supname:VARCHAR#, #supType.suptypeid:VARCHAR#,
+        #linkman:VARCHAR#,
+        #tel:VARCHAR#, #email:VARCHAR#, #address:VARCHAR#, #remark:VARCHAR#)
+	</insert>
+	
+	<update id="editSup" parameterClass="sup">
+	   update bas_supplier
+        <dynamic prepend="set">
+            <isNotNull prepend="," property="supname">
+                supName = #supname:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="supType.suptypeid">
+                supTypeId = #supType.suptypeid:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="linkman">
+                linkman = #linkman:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="tel">
+                tel = #tel:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="email">
+                email = #email:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="address">
+                address = #address:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="remark">
+                remark = #remark:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        where supId = #supid:VARCHAR#
+	</update>
+	
+	<delete id="delSupById">
+	   delete from bas_supplier where supId=#value#
+	</delete>
+	
+</sqlMap>

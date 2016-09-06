@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" maxRequests="64" maxSessions="20"
+		maxTransactions="10" useStatementNamespaces="true" />
+
+	<sqlMap resource="net/beifeng/mobile_scm/test/entity/sqlmap_test.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/system/entity/sqlmap_menu.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/system/entity/sqlmap_role.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/system/entity/sqlmap_user.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/system/entity/sqlmap_log.xml" />
+
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_dept.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_emp.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_supplierType.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_customerType.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_supplier.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_customer.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_color.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_brand.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_config.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_bonusType.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_mobType.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_accessoryType.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/basic/entity/sqlmap_account.xml" />
+	
+	<sqlMap resource="net/beifeng/mobile_scm/sup/entity/sqlmap_mobStockIn.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/sup/entity/sqlmap_mobReturn.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/sup/entity/sqlmap_mobEx.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/sup/entity/sqlmap_pay.xml" />
+	<sqlMap resource="net/beifeng/mobile_scm/sup/entity/sqlmap_commonBonus.xml" />
+	
+	<sqlMap resource="net/beifeng/mobile_scm/sto/entity/sqlmap_mobStock.xml" />
+</sqlMapConfig>

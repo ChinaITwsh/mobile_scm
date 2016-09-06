@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="commonBonus">
+	<typeAlias alias="commonBonus"
+		type="net.beifeng.mobile_scm.sup.entity.CommonBonus" />
+	<typeAlias alias="commonBonusSn"
+		type="net.beifeng.mobile_scm.sup.entity.CommonBonusSn" />
+
+	<insert id="addInvoice" parameterClass="commonBonus">
+		insert into
+		sup_commonbonus (invoiceid, supplierId, mobTypeId, bonusTypeId,
+		startDate, endDate,
+		amount, unitPrice, totalMoney, inputUserId,
+		inputDate, checkUserId,
+		checkDate, status, remark,
+		orgId)
+		values
+		(#invoiceid:VARCHAR#, #supplierid:VARCHAR#, #mobtypeid:VARCHAR#,
+		#bonustypeid:CHAR#,
+		#startdate:TIMESTAMP#, #enddate:TIMESTAMP#, 0,
+		#unitprice:DECIMAL#,
+		0, '11F4E6467C414AC39EEEE38C70A37CA9',
+		#inputdate:TIMESTAMP#,
+		null,
+		null, #status:TINYINT#, #remark:VARCHAR#,
+		'8CDB0902038E499EBD518E168FEC281B')
+	</insert>
+
+	<select id="getInvoice" resultClass="commonBonus">
+		select * from
+		sup_commonBonus
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and">
+				invoiceId=#value#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getSns" resultClass="commonBonusSn">
+		select * from sup_commonBonusSns
+		where invoiceId=#value#
+    </select>
+
+	<select id="getAllStockInSns" resultClass="commonBonusSn">
+		select sn1, sn2 from
+		sup_mobStockIn m join sup_StockInSn s on
+		m.invoiceid=s.invoiceid where
+		m.inputDate &gt;= #startdate# and m.inputDate &lt;= #enddate# and m.supplierid=#supplierid# and m.mobtypeid=#mobtypeid# and orgid=#orgid# 
+    </select>
+	<select id="getReturnSn" resultClass="string">
+		select sn1 from sup_mobReturn m join sup_mobReturnSn s on
+		m.invoiceid=s.invoiceid where m.inputDate &gt;= #startdate# and m.inputDate &lt;= #enddate# and m.supplierid=#supplierid# and m.mptypeid=#mobtypeid# and orgid=#orgid# 
+    </select>
+	<select id="getExSn" resultClass="string">
+		select oldSn1 from sup_mobExchange m join sup_mobExchangeSns s on
+		m.invoiceid=s.invoiceid where m.inputDate &gt;= #startdate# and m.inputDate &lt;= #enddate# and m.supplierid=#supplierid# and m.mobtypeid=#mobtypeid# and orgid=#orgid# 
+    </select>
+</sqlMap>

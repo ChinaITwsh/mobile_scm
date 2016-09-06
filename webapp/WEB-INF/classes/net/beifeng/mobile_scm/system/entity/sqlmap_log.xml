@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="log">
+	<typeAlias alias="log"
+		type="net.beifeng.mobile_scm.system.entity.SysLog" />
+
+	<insert id="addLog" parameterClass="log">
+		insert into sys_log (id,
+		action_name, parameter, account, oper_time)
+		values (#id:CHAR#,
+		#actionName:VARCHAR#, #parameter:VARCHAR#,
+		#account:VARCHAR#,
+		#operTime:TIMESTAMP#)
+	</insert>
+	<resultMap id="logRM" class="log">
+		<result column="id" property="id" jdbcType="CHAR" />
+		<result column="action_name" property="actionName" jdbcType="VARCHAR" />
+		<result column="parameter" property="parameter" jdbcType="VARCHAR" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="oper_time" property="operTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<select id="getLog" resultMap="logRM">
+		select * from sys_log
+		<dynamic prepend="where">
+			<isNotEmpty property="beginDate" prepend="and">
+				oper_time &gt;= #beginDate#
+	       </isNotEmpty>
+	       <isNotEmpty property="endDate" prepend="and">
+	           oper_time &lt;= #endDate#
+	       </isNotEmpty>
+	       <isNotEmpty property="accName" prepend="and">
+	           account=#accName#
+	       </isNotEmpty>
+	   </dynamic>
+	   order by oper_time 
+	</select>
+	<delete id="delLog">
+	   <![CDATA[
+	   delete from sys_log where oper_time < #value#
+	   ]]>
+	</delete>
+</sqlMap>

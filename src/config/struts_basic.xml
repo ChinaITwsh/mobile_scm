@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="basic" namespace="/" extends="cust-default">
+		<action name="deptManage_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.DeptManageAction">
+			<result name="list">
+				/WEB-INF/jsp/basic/dept_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/dept_add.jsp
+			</result>
+			<result name="toEdit">
+				/WEB-INF/jsp/basic/dept_edit.jsp
+			</result>
+			<result name="succ" type="redirect">
+				deptManage_listDept.do
+			</result>
+		</action>
+
+		<action name="empManage_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.EmpManageAction">
+			<result name="list">/WEB-INF/jsp/basic/emp_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/emp_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/emp_edit.jsp
+			</result>
+			<result name="succ" type="redirect">
+				empManage_listEmp.do
+			</result>
+		</action>
+
+		<action name="supType_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.SupTypeAction">
+			<result name="list">/WEB-INF/jsp/basic/suptype_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/suptype_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/suptype_edit.jsp
+			</result>
+			<result name="succ" type="redirect">supType_list.do
+			</result>
+		</action>
+
+		<action name="sup_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.SupAction">
+			<result name="list">/WEB-INF/jsp/basic/sup_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/sup_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/sup_edit.jsp
+			</result>
+			<result name="succ" type="redirect">sup_list.do
+			</result>
+		</action>
+
+		<action name="custType_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.CustTypeAction">
+			<result name="list">/WEB-INF/jsp/basic/custtype_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/custtype_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/custtype_edit.jsp
+			</result>
+			<result name="succ" type="redirect">custType_list.do
+			</result>
+		</action>
+
+		<action name="cust_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.CustAction">
+			<result name="list">/WEB-INF/jsp/basic/cust_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/cust_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/cust_edit.jsp
+			</result>
+			<result name="succ" type="redirect">cust_list.do
+            </result>
+		</action>
+
+		<action name="color_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.ColorAction">
+			<result name="list">/WEB-INF/jsp/basic/color.jsp
+			</result>
+			<result name="succ" type="redirect">color_list.do</result>
+		</action>
+
+		<action name="brand_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.BrandAction">
+			<result name="list">/WEB-INF/jsp/basic/brand.jsp
+			</result>
+			<result name="succ" type="redirect">brand_list.do</result>
+		</action>
+
+		<action name="config_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.ConfigAction">
+			<result name="list">/WEB-INF/jsp/basic/config.jsp
+			</result>
+			<result name="succ" type="redirect">config_list.do</result>
+		</action>
+
+		<action name="bonusType_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.BonusTypeAction">
+			<result name="list">/WEB-INF/jsp/basic/bonus_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/bonus_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/bonus_edit.jsp
+			</result>
+			<result name="succ" type="redirect">bonusType_list.do
+			</result>
+		</action>
+
+		<action name="mobType_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.MobTypeAction">
+			<result name="list">/WEB-INF/jsp/basic/mobtype_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/mobtype_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/mobtype_edit.jsp
+			</result>
+			<result name="succ" type="redirect">mobType_list.do
+			</result>
+			<result name="viewBonus">/WEB-INF/jsp/basic/mobtype_bonus.jsp
+			</result>
+		</action>
+
+		<action name="accessoryType_*" method="{1}"
+			class="net.beifeng.mobile_scm.basic.action.AccessoryTypeAction">
+			<result name="list">/WEB-INF/jsp/basic/accessoryType_list.jsp
+			</result>
+			<result name="add">/WEB-INF/jsp/basic/accessoryType_add.jsp
+			</result>
+			<result name="edit">/WEB-INF/jsp/basic/accessoryType_edit.jsp
+			</result>
+			<result name="succ" type="redirect">accessoryType_list.do
+			</result>
+		</action>
+		
+		<action name="account_*" method="{1}"
+            class="net.beifeng.mobile_scm.basic.action.AccountAction">
+            <result name="list">/WEB-INF/jsp/basic/account_list.jsp
+            </result>
+            <result name="add">/WEB-INF/jsp/basic/account_add.jsp
+            </result>
+            <result name="edit">/WEB-INF/jsp/basic/account_edit.jsp
+            </result>
+            <result name="succ" type="redirect">account_list.do
+            </result>
+        </action>
+	</package>
+
+</struts>

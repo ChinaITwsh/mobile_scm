@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="sto" namespace="/" extends="cust-default">
+		<action name="stoView_*" method="{1}"
+			class="net.beifeng.mobile_scm.sto.action.MobStockAction">
+			<result name="view">/WEB-INF/jsp/sto/mobStockView.jsp
+			</result>	
+			<result name="detail">/WEB-INF/jsp/sto/mobStockDetail.jsp</result>		
+		</action>
+		
+	</package>
+
+</struts>

@@ -1,0 +1,22 @@
+body {
+	background-image: url(../images/welcome_back.gif);
+}
+
+.logo {
+	position: absolute;
+	width: 387px;
+	height: 39px;
+	top: 70px;
+	left: 68px;
+	background-image: url(../images/welcome_logo.png);
+}
+
+.message {
+	position: absolute;
+	width: 736px;
+	height: 350px;
+	bottom: 5%;
+	left: 128px;
+	background-image: url(../images/welcome_messback.png);
+	background-repeat: no-repeat;
+}

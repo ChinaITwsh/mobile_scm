@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cust">
+	<typeAlias alias="cust"
+		type="net.beifeng.mobile_scm.basic.entity.Customer" />
+
+	<resultMap id="custRm" class="cust">
+		<result column="custId" property="custid" jdbcType="VARCHAR" />
+		<result column="custName" property="custname" jdbcType="VARCHAR" />
+		<result column="custTypeId" property="custType" select="custType.getTypeById" />
+		<result column="linkman" property="linkman" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="fax" property="fax" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getCust" resultMap="custRm">
+		select * from bas_customer
+		<dynamic prepend="where">
+			<isNotEmpty property="cust.custType.custtypeid" prepend="where">
+				custTypeId=#cust.custType.custtypeid#
+	       </isNotEmpty>
+			<isNotEmpty property="cust.custname" prepend="where">
+				custName like
+				concat('%', #cust.custname#, '%')
+	       </isNotEmpty>
+	   </dynamic>
+	   order by custId 
+	</select>
+	
+	<select id="getCustById" resultMap="custRm">
+	   select * from bas_customer where custId=#value#
+	</select>
+	
+	<insert id="addCust" parameterClass="cust">
+	   insert into bas_customer (custId, custName, custTypeId, linkman, tel,
+	    email, address, fax,
+	    remark)
+	    values (#custid:VARCHAR#, #custname:VARCHAR#, #custType.custtypeid:VARCHAR#,
+	    #linkman:VARCHAR#,
+	    #tel:VARCHAR#, #email:VARCHAR#, #address:VARCHAR#, #fax:VARCHAR#, #remark:VARCHAR#)
+	</insert>
+	
+	<update id="editCust" parameterClass="cust">
+	   update bas_customer
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="custname" >
+        custName = #custname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="custType.custtypeid" >
+        custTypeId = #custType.custtypeid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="linkman" >
+        linkman = #linkman:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="tel" >
+        tel = #tel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="email" >
+        email = #email:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="address" >
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fax" >
+        fax = #fax:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="remark" >
+        remark = #remark:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where custId = #custid:VARCHAR#
+	</update>
+	
+	<delete id="delById">
+	   delete from bas_customer where custId=#value#
+	</delete>
+</sqlMap>

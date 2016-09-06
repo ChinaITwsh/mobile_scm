@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- 计划任务管理器 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="clearLogTrigger" />
+				<ref bean="dialySaleReportTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 清理日志任务 -->
+	<bean id="clearLogTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 1 * ?</value>
+		</property>
+	</bean>
+
+	<!-- 生成日报表任务 -->
+	<bean id="dialySaleReportTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="reportJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 5 0 * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 以代理方式执行任务方法 -->
+	<bean id="methodInvokingJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="logService" />
+		</property>
+		<property name="targetMethod">
+			<value>clearLog</value>
+		</property>
+	</bean>
+
+	<bean id="reportJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="reportService" />
+		</property>
+		<property name="targetMethod">
+			<value>generateReport</value>
+		</property>
+	</bean>
+</beans>
+
+	<!--
+		秒 分 时 日 月 星期几 年 0 0 0 10 12 ? 2009 0 0 0 12 ? * 0 0 1 1 * ?
+	-->

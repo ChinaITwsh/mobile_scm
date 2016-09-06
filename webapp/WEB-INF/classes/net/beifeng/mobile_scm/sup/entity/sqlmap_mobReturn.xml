@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="mobReturn">
+	<typeAlias alias="mobReturn"
+		type="net.beifeng.mobile_scm.sup.entity.MobReturn" />
+
+	<select id="getMobReturn" resultClass="mobReturn">
+		SELECT
+		mr.invoiceid,
+		mr.status,
+		mr.supplierId,
+		mr.mpTypeId,
+		mr.amount,
+		mr.returnPrice,
+		mr.totalMoney,
+		mr.inputUserId,
+		mr.inputDate,
+		mr.checkDate,
+		mr.checkUserId,
+		mr.remark,
+		mr.orgId,
+		sup.supName,
+		mt.mobTypeName,
+		e1.empName AS inputUserName,
+		e2.empName AS
+		checkUserName,
+		org.deptName AS orgName
+		FROM
+		sup_mobreturn AS mr
+		Left Join
+		bas_supplier AS sup ON mr.supplierId = sup.supId
+		Left Join bas_mobtype
+		AS mt ON mr.mpTypeId = mt.mobTypeId
+		Left Join sys_users AS u1 ON
+		mr.inputUserId = u1.userId
+		Left Join basic_emp AS e1 ON u1.userId =
+		e1.userId
+		Left Join sys_users AS u2 ON mr.checkUserId = u2.userId
+		Left
+		Join basic_emp AS e2 ON u2.userId = e2.userId
+		Inner Join basic_dept AS
+		org ON mr.orgId = org.deptId
+
+		<dynamic prepend="where">
+			<iterate prepend="and" open="(" close=")" property="orgScope"
+				conjunction="or">
+				mr.orgId=#orgScope[]#
+            </iterate>
+			<isNotEmpty property="startDate" prepend="and">
+				mr.inputDate >=
+				#startDate#
+          </isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+             <![CDATA[ mr.inputDate <= #endDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="mobReturn.supTypeId" prepend="and">
+				sup.supTypeId=#mobReturn.supTypeId#
+          </isNotEmpty>
+			<isNotEmpty property="mobReturn.supplierid" prepend="and">
+				mr.supplierid=#mobReturn.supplierid#
+          </isNotEmpty>
+			<isNotEmpty property="mobReturn.brand" prepend="and">
+				mt.brand=#mobReturn.brand#
+          </isNotEmpty>
+			<isNotEmpty property="mobReturn.mptypeid" prepend="and">
+				mr.mobtypeid=#mobReturn.mptypeid#
+          </isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="add" parameterClass="mobReturn">
+		insert into sup_mobreturn
+		(invoiceid, status, supplierId, mpTypeId, amount,
+		returnPrice,
+		totalMoney, inputUserId, inputDate, checkDate, checkUserId, remark,
+		orgId)
+		values (#invoiceid:VARCHAR#, #status:INTEGER#,
+		#supplierid:VARCHAR#,
+		#mptypeid:VARCHAR#,
+		#amount:INTEGER#,
+		#returnprice:DECIMAL#, #totalmoney:DECIMAL#, #inputuserid:VARCHAR#,
+		#inputdate:TIMESTAMP#, null, null,
+		#remark:VARCHAR#,
+		#orgid:VARCHAR#)
+	</insert>
+
+	<insert id="addSns">
+		insert into sup_mobreturnsn values(#id#, #invoiceid#, #sn1#, #sn2#)
+	</insert>
+</sqlMap>

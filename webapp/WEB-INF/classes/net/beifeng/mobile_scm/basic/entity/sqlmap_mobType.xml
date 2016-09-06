@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="mobType">
+	<typeAlias alias="mobType"
+		type="net.beifeng.mobile_scm.basic.entity.Mobtype" />
+
+	<select id="getType" resultClass="mobType">
+		select * from bas_mobType
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="mobType.mobtypeid">
+				mobTypeId=#mobType.mobtypeid#
+		    </isNotEmpty>
+			<isNotEmpty prepend="and" property="mobType.brand">
+				brand=#mobType.brand#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="mobType.mobtypename">
+				mobTypeName like
+				concat('%', #mobType.mobtypename#, '%')
+			</isNotEmpty>		
+		</dynamic>
+		order by mobTypeId
+	</select>
+
+    <select id="getBonus" resultClass="hashMap">
+        select m.bonusTypeId,typeName, money from bas_mobBonus m, bas_bonusType b where m.bonusTypeId=b.bonusTypeId and m.mobTypeId=#value#  
+    </select>
+    
+    <insert id="addType" parameterClass="mobType">
+	    insert into bas_mobtype (mobTypeId, brand, mobTypeName, buyPrice, remark)
+	    values (#mobtypeid:VARCHAR#, #brand:VARCHAR#, #mobtypename:VARCHAR#, #buyprice:DECIMAL#,
+	    #remark:VARCHAR#)
+    </insert>
+    
+    <update id="editType" parameterClass="mobType">
+	    update bas_mobtype
+	    <dynamic prepend="set" >
+	      <isNotNull prepend="," property="brand" >
+	        brand = #brand:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="mobtypename" >
+	        mobTypeName = #mobtypename:VARCHAR#
+	      </isNotNull>
+	      <isNotNull prepend="," property="buyprice" >
+	        buyPrice = #buyprice:DECIMAL#
+	      </isNotNull>
+	      <isNotNull prepend="," property="remark" >
+	        remark = #remark:VARCHAR#
+	      </isNotNull>
+	    </dynamic>
+	    where mobTypeId = #mobtypeid:VARCHAR#
+    </update>
+    
+    <delete id="delBonusPrice">
+        delete from bas_mobBonus where mobTypeId=#value#
+    </delete>
+    
+    <delete id="delType">
+        delete from bas_mobType where mobTypeId=#value#
+    </delete>
+    
+    <insert id="addBonusPrice" parameterClass="net.beifeng.mobile_scm.basic.entity.BonusPrice">
+        insert into bas_mobBonus values(#id#,#mobTypeId#,#bonusTypeId#,#bonusPrice#)
+    </insert>
+</sqlMap>

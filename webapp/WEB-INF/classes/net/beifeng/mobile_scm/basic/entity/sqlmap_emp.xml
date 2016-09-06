@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="emp">
+	<typeAlias alias="emp"
+		type="net.beifeng.mobile_scm.basic.entity.Emp" />
+
+	<resultMap class="emp" id="empRM">
+		<result column="empId" jdbcType="CHAR" property="empId" />
+		<result column="empName" jdbcType="VARCHAR" property="empName" />
+		<result column="tel" jdbcType="VARCHAR" property="tel" />
+		<result column="empType" jdbcType="TINYINT" property="empType" />
+		<result column="deptId" jdbcType="CHAR" property="dept"
+			select="emp.getDept" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		
+		<result column="userId" jdbcType="CHAR" property="user" select="emp.getAcc" />
+		
+	</resultMap>
+
+	<select id="getEmp" resultMap="empRM">
+		select * from basic_emp
+		<dynamic prepend="where">
+			<isNotEmpty property="emp.empId" prepend="and">
+				empId=#emp.empId#
+			</isNotEmpty>
+			<isNotEmpty property="emp.empName" prepend="and">
+				empName like concat('%',#emp.empName#, '%')
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getDept" resultClass="dept">
+		select * from basic_dept where deptId=#value#
+	</select>
+	
+	<select id="getAcc" resultClass="acc">
+		select * from sys_users where userId=#value#
+	</select>
+
+	<insert id="addEmp" parameterClass="emp">
+		insert into basic_emp (empId, empName, tel, empType, deptId,
+		remark, userId) values (#empId:CHAR#, #empName:VARCHAR#,
+		#tel:VARCHAR#, #empType:TINYINT#, #dept.deptId:CHAR#,
+		#remark:VARCHAR#, null);
+	</insert>
+
+	<delete id="delEmp" parameterClass="emp">
+		delete from basic_emp
+		<dynamic prepend="where">
+			<isNotEmpty property="empId" prepend="and">
+				empId=#empId#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+
+	<update id="editEmp" parameterClass="emp">
+		update basic_emp
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="empName">
+				empName = #empName:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="tel">
+				tel = #tel:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="empType">
+				empType = #empType:TINYINT#
+			</isNotNull>
+			<isNotNull prepend="," property="dept.deptId">
+				deptId = #dept.deptId:CHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="remark">
+				remark = #remark:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="user.userId">
+				userId=#user.userId#
+			</isNotNull>
+		</dynamic>
+		where empId = #empId:CHAR#
+	</update>
+</sqlMap>

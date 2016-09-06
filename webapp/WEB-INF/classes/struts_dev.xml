@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="dev" namespace="/" extends="json-default">
+		<action name="menuManage_*" method="{1}"
+			class="dev.action.MenuManageAction">
+			<result name="managePage">
+				/WEB-INF/jsp/dev/menu_manage.jsp
+			</result>
+			<result name="menuTree" type="json"></result>
+			<result name="menuDetail">
+				/WEB-INF/jsp/dev/menu_detail.jsp
+			</result>
+			<result name="addMenuPage">
+				/WEB-INF/jsp/dev/menu_add.jsp
+			</result>
+			<result name="succ" type="redirect">
+				<![CDATA[
+				menuManage_menuDetail.do?menu.menuId=${menu.parentId}&refreshTree=true
+				]]>
+			</result>
+			<result name="editMenuPage">
+				/WEB-INF/jsp/dev/menu_edit.jsp
+			</result>
+			<result name="addActionPage">
+				/WEB-INF/jsp/dev/action_add.jsp
+			</result>
+			<result name="actionSucc" type="redirect">
+				menuManage_menuDetail.do?menu.menuId=${action.menuId}
+			</result>
+			<result name="editActionPage">
+				/WEB-INF/jsp/dev/action_edit.jsp
+			</result>
+		</action>
+	</package>
+
+</struts>

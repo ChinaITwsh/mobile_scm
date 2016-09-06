@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="custType">
+	<typeAlias alias="custType"
+		type="net.beifeng.mobile_scm.basic.entity.Customertype" />
+
+	<select id="getType" resultClass="custType">
+		select * from bas_customerType
+		order by custTypeId
+	</select>
+
+	<select id="getTypeById" resultClass="custType">
+		select * from
+		bas_customerType where custTypeId=#value#
+	</select>
+
+	<insert id="addType" parameterClass="custType">
+		insert into bas_customertype
+		(custTypeId, custTypeName, remark)
+		values (#custtypeid:VARCHAR#,
+		#custtypename:VARCHAR#, #remark:VARCHAR#)
+	</insert>
+
+	<update id="editType" parameterClass="custType">
+		update bas_customertype
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="custtypename">
+				custTypeName = #custtypename:VARCHAR#
+            </isNotNull>
+			<isNotNull prepend="," property="remark">
+				remark = #remark:VARCHAR#
+            </isNotNull>
+		</dynamic>
+		where custTypeId = #custtypeid:VARCHAR#
+	</update>
+	
+	<delete id="delType">
+	   delete from bas_customertype where custTypeId=#value#
+	</delete>
+</sqlMap>
